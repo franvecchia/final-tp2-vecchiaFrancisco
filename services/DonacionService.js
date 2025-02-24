@@ -1,8 +1,11 @@
 import Donacion from "../models/Donacion.js";
+import EmailService from "./EmailService.js";
 
 const donaciones = []
+const emailService = new EmailService()
 
 export default class DonacionService {
+
     crearDonacion = (body) => {
         const {monto, nombreCompleto} = body
         const id = donaciones.length + 1
@@ -11,7 +14,7 @@ export default class DonacionService {
         donaciones.push(nuevaDonacion)
 
         if (nuevaDonacion.nombreCompleto.toUpperCase() !== "ANONIMO" && nuevaDonacion.monto > 10000) {
-            console.log(`Se ha registrado una nueva donacion no anonima mayor a 10000, a nombre de: ${nombreCompleto} de un total de $${monto}`)
+            emailService.enviarMail(nuevaDonacion)
         }
 
         return nuevaDonacion
